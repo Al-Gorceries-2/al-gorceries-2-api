@@ -1,0 +1,9 @@
+apiVersion: v2
+name: al-gorceries-2-api-chart
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: postgresql
+    version: 18.2.0
+    repository: https://charts.bitnami.com/bitnami
