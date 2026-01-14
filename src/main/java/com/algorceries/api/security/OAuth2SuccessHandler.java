@@ -6,6 +6,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import com.algorceries.api.config.UiProperties;
 import com.algorceries.api.entity.User;
 import com.algorceries.api.service.IJwtService;
 import com.algorceries.api.service.IUserService;
@@ -18,10 +19,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final IUserService userService;
     private final IJwtService jwtService;
+    private final UiProperties uiProperties;
 
-    public OAuth2SuccessHandler(IUserService userService, IJwtService jwtService) {
+    public OAuth2SuccessHandler(IUserService userService, IJwtService jwtService, UiProperties uiProperties) {
         this.userService = userService;
         this.jwtService = jwtService;
+        this.uiProperties = uiProperties;
     }
 
     @Override
@@ -49,6 +52,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         cookie.setMaxAge(60 * 60); // 1 hour
         response.addCookie(cookie);
 
-        response.sendRedirect("http://localhost:5173");
+        response.sendRedirect(uiProperties.getUrl());
     }
 }

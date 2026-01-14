@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: al-gorceries-2-api
+  config:
+    import: optional:file:env.yaml
