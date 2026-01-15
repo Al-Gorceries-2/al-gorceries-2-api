@@ -46,9 +46,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         // Set JWT in an HttpOnly cookie
         Cookie cookie = new Cookie("jwt", token);
-        cookie.setHttpOnly(true); // not accessible via JS
-        cookie.setSecure(false); // true in production with HTTPS
-        cookie.setPath("/"); // accessible to your whole domain
+        cookie.setHttpOnly(true);
+        cookie.setSecure(uiProperties.isSecure());
+        cookie.setPath("/");
         cookie.setMaxAge(60 * 60); // 1 hour
         response.addCookie(cookie);
 

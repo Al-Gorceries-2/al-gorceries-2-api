@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.algorceries.api.dto.HouseholdCreateDto;
 import com.algorceries.api.dto.HouseholdViewDto;
 import com.algorceries.api.dto.RecipeCreateDto;
@@ -67,10 +68,20 @@ public class HouseholdController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public HouseholdViewDto createHousehold(@RequestBody HouseholdCreateDto householdCreateDto) {
-        return householdMapper
-            .entityToViewDto(householdService.save(householdMapper.createDtoToEntity(householdCreateDto)));
+    public ResponseEntity<HouseholdViewDto> createHousehold(
+        @RequestBody HouseholdCreateDto householdCreateDto, @AuthenticationPrincipal JwtUserDetails user
+    ) {
+        if (user.getHouseholdId() != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        var household =
+            householdService.create(householdMapper.createDtoToEntity(householdCreateDto), user.getUsername());
+        return ResponseEntity
+            .created(
+                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(household.getId()).toUri()
+            )
+            .body(householdMapper.entityToViewDto(household));
     }
 
     @PostMapping("/{id}/users")

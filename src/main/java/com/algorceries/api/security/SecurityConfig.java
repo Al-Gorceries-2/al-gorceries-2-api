@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import com.algorceries.api.config.UiProperties;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
@@ -18,10 +19,14 @@ public class SecurityConfig {
 
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final JwtCookieAuthFilter jwtCookieAuthFilter;
+    private final UiProperties uiProperties;
 
-    public SecurityConfig(JwtCookieAuthFilter jwtCookieAuthFilter, OAuth2SuccessHandler oAuth2SuccessHandler) {
+    public SecurityConfig(
+        JwtCookieAuthFilter jwtCookieAuthFilter, OAuth2SuccessHandler oAuth2SuccessHandler, UiProperties uiProperties
+    ) {
         this.jwtCookieAuthFilter = jwtCookieAuthFilter;
         this.oAuth2SuccessHandler = oAuth2SuccessHandler;
+        this.uiProperties = uiProperties;
     }
 
     @Bean
@@ -38,7 +43,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOrigins(List.of(uiProperties.getUrl()));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("*"));
