@@ -1,4 +1,4 @@
-name: Build and Push Container Image, Deploy to Kubernetes
+name: Deploy to Kubernetes
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   packages: write
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
