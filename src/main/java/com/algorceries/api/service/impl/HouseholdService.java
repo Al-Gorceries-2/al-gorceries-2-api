@@ -29,8 +29,15 @@ public class HouseholdService implements IHouseholdService {
     }
 
     @Override
-    public Household save(Household household) {
-        return householdRepository.save(household);
+    public Household create(Household household, String userId) {
+        Try<User> user = userService.findById(userId)
+            .toTry(() -> new EntityNotFoundException("User with id %s not found".formatted(userId)));
+
+        return user.map(u -> {
+            household.getUsers().add(u);
+            u.setHousehold(household);
+            return household;
+        }).andThen(householdRepository::save).get();
     }
 
     @Override

@@ -6,7 +6,7 @@ import io.vavr.control.Try;
 
 public interface IHouseholdService {
     Option<Household> findById(String id);
-    Household save(Household household);
+    Household create(Household household, String userId);
     Try<Household> addUser(String householdId, String userId);
     Try<Household> removeUser(String householdId, String userId);
 }
