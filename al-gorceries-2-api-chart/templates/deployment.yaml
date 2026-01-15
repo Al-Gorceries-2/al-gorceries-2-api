@@ -1,26 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: al-gorceries-2-api
+  name: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: al-gorceries-2-api
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: al-gorceries-2-api
+        app: {{ .Release.Name }}
     spec:
       containers:
-        - name: al-gorceries-2-api
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 8080
-          env:
-            - name: SPRING_DATASOURCE_URL
-              value: {{ .Values.env.SPRING_DATASOURCE_URL }}
-            - name: SPRING_DATASOURCE_USERNAME
-              value: {{ .Values.env.SPRING_DATASOURCE_USERNAME }}
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: {{ .Values.env.SPRING_DATASOURCE_PASSWORD }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+      volumes:
+        - name: config
+          secret:
+            secretName: "{{ .Release.Name }}-config"

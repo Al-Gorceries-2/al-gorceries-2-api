@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "{{ .Release.Name }}-config"
+type: Opaque
+stringData:
+  application.yaml: |
+    ui:
+      url: {{ .Values.config.ui.url | quote }}
+    spring:
+      datasource:
+        url: "jdbc:postgresql://{{ .Release.Name }}-postgresql:5432/{{ .Values.global.postgresql.auth.database }}"
+        username: {{ .Values.global.postgresql.auth.username | quote }}
+        password: {{ .Values.global.postgresql.auth.password | quote }}
+      jpa:
+        hibernate:
+          ddl-auto: none
+      security:
+        oauth2:
+          client:
+            registration:
+              google:
+                client-id: {{ .Values.config.oauth.google.clientId | quote }}
+                client-secret: {{ .Values.config.oauth.google.clientSecret | quote }}
+                scope:
+                  - email
+                redirect-uri: "https://{{ .Values.ingress.host }}/login/oauth2/code/{registrationId}"
+            provider:
+              google:
+                authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+                token-uri: https://oauth2.googleapis.com/token
+                user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+                user-name-attribute: sub

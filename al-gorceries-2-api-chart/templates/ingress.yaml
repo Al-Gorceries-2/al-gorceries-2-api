@@ -2,21 +2,27 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: al-gorceries-2-api-ingress
+  name: {{ .Release.Name }}
   annotations:
-    {{- range $key, $val := .Values.ingress.annotations }}
-    {{ $key }}: {{ $val }}
-    {{- end }}
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  ingressClassName: traefik
+  {{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+  {{- end }}
   rules:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /
+          - path: {{ .Values.ingress.path }}
             pathType: Prefix
             backend:
               service:
-                name: al-gorceries-2-api
+                name: {{ .Release.Name }}
                 port:
                   number: {{ .Values.service.port }}
 {{- end }}
