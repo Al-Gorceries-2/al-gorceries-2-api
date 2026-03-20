@@ -22,7 +22,7 @@ public class RecipeListController {
         this.mapper = mapper;
     }
 
-    @PostMapping("/recipeList/{id}/like/{recipeId}")
+    @PostMapping("/recipeLists/{id}/like/{recipeId}")
     public ResponseEntity<RecipeListViewDto> likeRecipe(@PathVariable("id") String id, @PathVariable("recipeId") String recipeId) {
         return service.likeRecipe(id, recipeId)
             .fold(
@@ -31,7 +31,7 @@ public class RecipeListController {
             );
     }
 
-    @PostMapping("/recipeList/{id}/dislike/{recipeId}")
+    @PostMapping("/recipeLists/{id}/dislike/{recipeId}")
     public ResponseEntity<RecipeListViewDto> dislikeRecipe(@PathVariable("id") String id, @PathVariable("recipeId") String recipeId) {
         return service.dislikeRecipe(id, recipeId)
             .fold(
