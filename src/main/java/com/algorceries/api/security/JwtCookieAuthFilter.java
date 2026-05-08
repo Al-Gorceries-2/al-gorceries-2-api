@@ -3,6 +3,8 @@ package com.algorceries.api.security;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@Profile("!dev")
 public class JwtCookieAuthFilter extends OncePerRequestFilter {
 
     private final IJwtService jwtService;

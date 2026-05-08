@@ -1,6 +1,9 @@
 package com.algorceries.api.controller;
 
 import java.util.List;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -68,7 +71,7 @@ public class HouseholdController {
 
     @PostMapping
     public ResponseEntity<HouseholdViewDto> createHousehold(
-        @RequestBody HouseholdCreateDto householdCreateDto, @AuthenticationPrincipal JwtUserDetails user
+        @RequestBody @Valid HouseholdCreateDto householdCreateDto, @AuthenticationPrincipal JwtUserDetails user
     ) {
         if (user.getHouseholdId() != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -119,7 +122,7 @@ public class HouseholdController {
 
     @PostMapping("{id}/recipes")
     public ResponseEntity<RecipeViewDto> createRecipe(
-        @RequestBody RecipeCreateDto recipeCreateDto, @PathVariable("id") String id,
+        @RequestBody @Valid RecipeCreateDto recipeCreateDto, @PathVariable("id") String id,
         @AuthenticationPrincipal JwtUserDetails user
     ) {
         if (!id.equals(user.getHouseholdId())) {
@@ -154,7 +157,7 @@ public class HouseholdController {
 
     @PostMapping("/{id}/recipeLists")
     public ResponseEntity<RecipeListViewDto> createRecipeList(
-        @RequestBody RecipeListCreateDto recipeListCreateDto, @PathVariable("id") String id,
+        @RequestBody @Valid RecipeListCreateDto recipeListCreateDto, @PathVariable("id") String id,
         @AuthenticationPrincipal JwtUserDetails user
     ) {
         if (!id.equals(user.getHouseholdId())) {
@@ -172,7 +175,7 @@ public class HouseholdController {
     @PatchMapping("/{id}/recipeLists/{recipeListId}")
     public ResponseEntity<RecipeListViewDto> updateRecipeList(
         @PathVariable("id") String id, @PathVariable("recipeListId") String recipeListId,
-        @RequestBody RecipeListPatchDto recipeListPatchDto, @AuthenticationPrincipal JwtUserDetails user
+        @RequestBody @Valid RecipeListPatchDto recipeListPatchDto, @AuthenticationPrincipal JwtUserDetails user
     ) {
         if (!id.equals(user.getHouseholdId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

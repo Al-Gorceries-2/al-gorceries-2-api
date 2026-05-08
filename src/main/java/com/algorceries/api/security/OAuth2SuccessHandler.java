@@ -1,6 +1,8 @@
 package com.algorceries.api.security;
 
 import java.io.IOException;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@Profile("!dev")
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final IUserService userService;
