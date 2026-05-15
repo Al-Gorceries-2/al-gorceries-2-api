@@ -7,7 +7,10 @@ import io.vavr.control.Option;
 
 @Repository
 public interface HouseholdRepository extends JpaRepository<Household, String> {
+
     default Option<Household> findByIdOption(String id) {
         return Option.ofOptional(findById(id));
     }
+
+    Option<Household> findByName(String name);
 }

@@ -40,12 +40,6 @@ public class Household {
         this.name = name;
     }
 
-    // Constructor to use whilst having one global household
-    public Household(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public String getId() {
         return id;
     }
